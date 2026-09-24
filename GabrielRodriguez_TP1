@@ -6,7 +6,7 @@ import json
 # imports from the Pyside6 library 
 from PySide6.QtWidgets import QApplication, QTableWidget, QTableView, \
 QTableWidgetItem, QMainWindow, QLabel, QLineEdit, QVBoxLayout, QMessageBox, \
-QWidget, QLineEdit, QPushButton, QHBoxLayout
+QWidget, QPushButton, QHBoxLayout
 from PyQt5.QtCore import Qt, QSortFilterProxyModel, QAbstractTableModel
 
 
@@ -185,8 +185,7 @@ if __name__ == "__main__":
     # setting the names of each column using the quality list 
     my_table.setHorizontalHeaderLabels(list_quality)
 
-
-    
+    # adding all the items to the table using the items list 
     for i in range(len(list_item)):
        my_table.setItem(0,i,QTableWidgetItem(list_item[i]))
 
@@ -199,26 +198,45 @@ if __name__ == "__main__":
     sorting_button = QPushButton("Sort Ascending/Descending")
     sorting_button.clicked.connect(sorting)
   
-
-
-
+    # creating the main window for the display 
     window = QMainWindow()
-    layout = QVBoxLayout()
+
+    #creating a central widget for the window 
     central = QWidget()
+
+    # creating a layout for the central widget 
+    layout = QVBoxLayout()
+
+    # adding the layout to the central widget and the central widget to the window 
     window.setCentralWidget(central)
     central.setLayout(layout)
 
-
+    # creating a label for the file name 
     file_name_label = QLabel()
+    # adding the file name to its label 
     file_name_label.setText(f"File Name : {file_name}")
 
+    # adding the file name to the layout 
     layout.addWidget(file_name_label)
+
+    # adding the file size to the layout 
     layout.addWidget(file_size(file_name))
+
+    # adding the file item count to the layout 
     layout.addWidget(file_item_count(file_name))
+
+    #adding the sorting button to the layout
     layout.addWidget(sorting_button)
+
+    # adding the search bar to the layout 
     layout.addWidget(search_bar)
+
+    #adding the table to the layout 
     layout.addWidget(my_table)
 
+
+    # displaying the window 
     window.show()
 
+    # stop the script if the window is closed 
     sys.exit(app.exec())
