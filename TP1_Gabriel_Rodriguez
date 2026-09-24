@@ -1,159 +1,204 @@
+# imports 
 import sys
 import os
 import json
 
+# imports from the Pyside6 library 
 from PySide6.QtWidgets import QApplication, QTableWidget, QTableView, \
 QTableWidgetItem, QMainWindow, QLabel, QLineEdit, QVBoxLayout, QMessageBox, \
 QWidget, QLineEdit, QPushButton, QHBoxLayout
 from PyQt5.QtCore import Qt, QSortFilterProxyModel, QAbstractTableModel
 
 
+# --------------------------------------------------------------------
+#                         FUNCTIONS
+# --------------------------------------------------------------------
+
+# fonction that verifies if the json file is valid or not 
 def verify_file(file_name):
 
+        # creating an error message box 
         error_message = QMessageBox()
         error_message.setWindowTitle("Error Found")
         error_message.setText("An error was found in the json folder. Please try again")
-        
+
+        # checking if the file is valid and showing the error box if there is an error 
         try:
+            # opening and reading the json file 
             with open(file_name, "r", encoding="utf-8") as folder:
                       json.load(folder)
             return True
+
+        # checking for errors 
         except (json.JSONDecodeError, OSError):
              error_message.exec()
              quit()
 
-
+# function that find the size of the json file 
 def file_size(file_name):
 
+     # creating a label for showing the file size
      file_size_label = QLabel()
+     # adding the file size to the label using the os
      file_size_label.setText(f"File Size : {os.path.getsize(file_name)} Byte")
-
 
      return file_size_label 
 
+# function that gives the number of items in the json file 
 def file_item_count(file_name):
 
+     # creating a label for showing the number of items 
      file_item_count_label = QLabel()
+
+     # opening and reading the json file 
      with open(file_name, "r", encoding="utf-8") as folder:
              data = json.load(folder)
 
+     # count variable 
      count = 0
+
+     # for loop on the data of the json file to count all the items 
      for i in data:
           for v in i.values():
                count += 1
 
+     # giving the count value to the label
      file_item_count_label.setText(f"Item Count : {count}")
 
      return file_item_count_label
 
-
-
+# function that creates a search option 
 def search(text):
+
+     # allows the text to not care about capital letters or spaces 
      text = text.lower().strip()
 
+     # for loop on the amount of rows in the table 
      for row in range(my_table.rowCount()):
+        
+        # resetting the match value to false 
         match = False
 
+        # for loop on the amount of columns in the table 
         for column in range(my_table.columnCount()):
+
+            # getting the items for the table 
             item = my_table.item(row, column)
 
+            # checking if the items text matches the given text
             if item and text in item.text().lower():
                 match = True
                 break
 
+        # hide all rows that dont match 
         my_table.setRowHidden(row, not match)
 
 
+# function that creates a sorting option in ascending and descending order 
 def sorting():
-     
-     reversed_state = False 
 
+     # row list to store all rows 
      rows = []
 
+     # count variables 
      row_count = my_table.rowCount()
      column_count = my_table.columnCount()
-
+ 
+     # for loop on the number of rows to collect all row data 
      for i in range(row_count):
 
+          # creating a row data list 
           row_data = []
 
+          # for loop on the number of columns to collect all items in each row 
           for j in range(column_count):
 
+               # getting the items from the table and puttin them in the row data list 
                item = my_table.item(i, j)
-               if item is not None:
-                    row_data.append(item.text())
-               else:
-                    row_data.append("")
+               row_data.append(item.text())
 
+          # adding the row data list to the list of all rows 
           rows.append(row_data)
 
-     reversed_state = not reversed_state
 
-     if reversed_state == True:
-          rows.reverse()
-     else:
-          rows.reverse()
-          
+     # reverse the rows 
+     rows.reverse()
 
+     # for loop on the elements of the rows list to add them back to the table 
      for x, row_data in enumerate(rows):
 
           for y, z in enumerate(row_data):
-
+           
                my_table.setItem(x,y,QTableWidgetItem(z))
+
+
           
+# --------------------------------------------------------------------
+#                         MAIN
+# --------------------------------------------------------------------
 
 if __name__ == "__main__":
 
-    liste_quality = []
-    liste_duplicate = []
-    liste_item = []
+    # creating lists for making the table 
+    list_quality = []
+    list_duplicate = []
+    list_item = []
     seen = set()
 
+    # creating the app variable to create all other Q variables 
     app = QApplication(sys.argv)
 
-
-
+    # asking for the name of the json file 
     file_name = input("enter the full json file name : ")
 
+    # verify the file 
     verify_file(file_name) 
 
-    # Open the json folder and iterate on its content, adding qualities to a list and items in another 
+    # Open the json folder and iterating on its content to add qualities to a list and items in another 
     with open(file_name, "r", encoding="utf-8") as folder:
         data = json.load(folder)
 
+        # for loop on the data of the json file 
         for i in data:
+            # for loop on each key/items in the json file (j = key / k = item)
             for j , k in i.items():
+               # preventing the quality list from having duplicates
                if j in seen:
-                   liste_duplicate.append(j)
+                   list_duplicate.append(j)
+               # adding the qualities to the list 
                else:
                    seen.add(j)
-                   liste_quality.append(j)
+                   list_quality.append(j)
 
+               # converting all non-string items into string for the list
                if isinstance(k, int):
-                   liste_item.append(str(k))
+                   list_item.append(str(k))
                elif isinstance(k,float):
-                   liste_item.append(str(k))
+                   list_item.append(str(k))
+               # adding the items to the list 
                else: 
-                   liste_item.append(k)
-    
-    my_table = QTableWidget(((len(liste_item)/(len(liste_quality)))),len(liste_quality))
-    
-    my_table.setHorizontalHeaderLabels(liste_quality)
+                   list_item.append(k)
+
+    # creating a table for displaying the json file data 
+    my_table = QTableWidget(((len(list_item)/(len(list_quality)))),len(list_quality))
+
+    # setting the names of each column using the quality list 
+    my_table.setHorizontalHeaderLabels(list_quality)
 
 
+    
+    for i in range(len(list_item)):
+       my_table.setItem(0,i,QTableWidgetItem(list_item[i]))
+
+    # creating a search bar and connecting it to the search function 
     search_bar = QLineEdit()
     search_bar.setPlaceholderText("Search...")
     search_bar.textChanged.connect(search)
 
+    # creating a button and connection to the sorting function 
     sorting_button = QPushButton("Sort Ascending/Descending")
- 
     sorting_button.clicked.connect(sorting)
   
-
-    
-    index = 0 
-    for i in range(len(liste_item)):
-        my_table.setItem(index,i,QTableWidgetItem(liste_item[i]))
 
 
 
