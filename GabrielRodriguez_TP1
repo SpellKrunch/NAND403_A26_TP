@@ -15,7 +15,7 @@ from PyQt5.QtCore import Qt, QSortFilterProxyModel, QAbstractTableModel
 # --------------------------------------------------------------------
 
 # fonction that verifies if the json file is valid or not 
-def verify_file(file_name):
+def verify_file(file_name): 
 
         # creating an error message box 
         error_message = QMessageBox()
@@ -47,7 +47,7 @@ def file_size(file_name):
 # function that gives the number of items in the json file 
 def file_item_count(file_name):
 
-     # creating a label for showing the number of items 
+     # creating a label for showing the number of items
      file_item_count_label = QLabel()
 
      # opening and reading the json file 
