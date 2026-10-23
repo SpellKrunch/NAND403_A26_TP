@@ -25,10 +25,10 @@ class ParameterBoard(QWidget):
         layout = QVBoxLayout(self)
 
         # creation du message d'entrer 
-        label = QLabel("Enter JSON file name")
+        label = QLabel("Enter JSON file path")
 
         # utiliser QTextEdit pour avoir le nom du fichier JSON 
-        text_input = QTextEdit("file name...")
+        text_input = QTextEdit("file path...")
         text_input.setFixedSize(400,30)
 
         # creation des 3 checkbox 
@@ -53,10 +53,10 @@ class ParameterBoard(QWidget):
 
 
     # fonction qui effectue l'organisation de l'outliner quand le bouton est appuye 
-    def on_click(self,file_name,selection_bool, color_bool, reorder_bool): 
+    def on_click(self,file_path,selection_bool, color_bool, reorder_bool): 
 
         # lecture du fichier JSON
-        with open(file_name, "r", encoding="utf-8") as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             color_identity = json.load(file)
 
         # creation d'un chunk pour implementer une fonction de ctrl z 
