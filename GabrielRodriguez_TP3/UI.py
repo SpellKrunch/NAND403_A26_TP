@@ -1,5 +1,5 @@
 
-from PySide6.QtWidgets import (QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel,QTextEdit,QSpinBox
+from PySide6.QtWidgets import (QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel,QTextEdit,QSpinBox,QGroupBox
 )
 
 import importlib
@@ -18,9 +18,9 @@ class RandomAnimator(QWidget):
     def build_ui(self):
         main_layout = QVBoxLayout(self)
 
-        
-        animation_timing_title = QLabel("Animation Timing")
+        animation_timing_group = QGroupBox("Animation Timing")
         animation_timing_layout = QHBoxLayout(self)
+        animation_timing_group.setLayout(animation_timing_layout)
 
         animation_timing_duration_label = QLabel("Durations (Frames):")
         animation_timing_duration_value = QSpinBox()
@@ -34,10 +34,15 @@ class RandomAnimator(QWidget):
         animation_timing_layout.addWidget(animation_timing_step_label)
         animation_timing_layout.addWidget(animation_timing_step_value)
 
+
         
-        translate_parameters_title = QLabel("Translate Parameters")
+        translate_parameters_group = QGroupBox("Translate Parameters (in cm)")
+        translate_min_max_layout = QVBoxLayout(self)
         translate_min_layout = QHBoxLayout(self) 
         translate_max_layout = QHBoxLayout(self) 
+        translate_min_max_layout.addLayout(translate_min_layout)
+        translate_min_max_layout.addLayout(translate_max_layout) 
+        translate_parameters_group.setLayout(translate_min_max_layout)      
 
         translate_min_x_label = QLabel("Min x:")
         translate_min_x_value = QSpinBox()
@@ -75,9 +80,13 @@ class RandomAnimator(QWidget):
 
 
 
-        rotate_parameters_title = QLabel("Rotate Parameters")
+        rotate_parameters_group = QGroupBox("Rotate Parameters (in degrees)")
+        rotate_min_max_layout = QVBoxLayout(self)
         rotate_min_layout = QHBoxLayout(self)
         rotate_max_layout = QHBoxLayout(self)
+        rotate_min_max_layout.addLayout(rotate_min_layout)
+        rotate_min_max_layout.addLayout(rotate_max_layout)
+        rotate_parameters_group.setLayout(rotate_min_max_layout)
 
         rotate_min_x_label = QLabel("Min x:")
         rotate_min_x_value = QSpinBox()
@@ -114,9 +123,13 @@ class RandomAnimator(QWidget):
         rotate_max_layout.addWidget(rotate_max_z_value)
 
 
-        scale_parameters_title = QLabel("Scale Parameters")
+        scale_parameters_group = QGroupBox("Scale Parameters (in cm)")
+        scale_min_max_layout = QVBoxLayout(self)
         scale_min_layout = QHBoxLayout(self)
         scale_max_layout = QHBoxLayout(self)
+        scale_min_max_layout.addLayout(scale_min_layout)
+        scale_min_max_layout.addLayout(scale_max_layout)
+        scale_parameters_group.setLayout(scale_min_max_layout)
 
         scale_min_x_label = QLabel("Min x:")
         scale_min_x_value = QSpinBox()
@@ -155,22 +168,20 @@ class RandomAnimator(QWidget):
 
 
         create_button = QPushButton("Generate")
-        create_button.clicked.connect(lambda: Functions.generate_animation())
+        create_button.clicked.connect(lambda: Functions.generate_animation(animation_timing_duration_value.value(),animation_timing_step_value.value(),
+                                                                           translate_min_x_value.value(),translate_min_y_value.value(),
+                                                                           translate_min_z_value.value(),translate_max_x_value.value(),
+                                                                           translate_max_y_value.value(),translate_max_z_value.value(),
+                                                                           rotate_min_x_value.value(),rotate_min_y_value.value(),
+                                                                           rotate_min_z_value.value(),rotate_max_x_value.value(),
+                                                                           rotate_max_y_value.value(),rotate_max_z_value.value(), 
+                                                                           scale_min_x_value.value(),scale_min_y_value.value(),
+                                                                           scale_min_z_value.value(),scale_max_x_value.value(),
+                                                                           scale_max_y_value.value(),scale_max_z_value.value() ))
 
-
-        main_layout.addWidget(animation_timing_title)
-        main_layout.addLayout(animation_timing_layout)
-
-        main_layout.addWidget(translate_parameters_title)
-        main_layout.addLayout(translate_min_layout)
-        main_layout.addLayout(translate_max_layout)
-
-        main_layout.addWidget(rotate_parameters_title)
-        main_layout.addLayout(rotate_min_layout)
-        main_layout.addLayout(rotate_max_layout)
-
-        main_layout.addWidget(scale_parameters_title)
-        main_layout.addLayout(scale_min_layout)
-        main_layout.addLayout(scale_max_layout)
+        main_layout.addWidget(animation_timing_group)
+        main_layout.addWidget(translate_parameters_group)
+        main_layout.addWidget(rotate_parameters_group)
+        main_layout.addWidget(scale_parameters_group)
         
         main_layout.addWidget(create_button)
