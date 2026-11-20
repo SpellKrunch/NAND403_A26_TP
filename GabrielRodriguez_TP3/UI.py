@@ -7,21 +7,29 @@ import Functions
 importlib.reload(Functions)
 
 class RandomAnimator(QWidget):
-    
+
+    # defining the construction function 
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Random Animation Generator")
         self.setFixedWidth(400)
         self.setFixedHeight(600)
         self.build_ui()
-    
+
+    #function that construction the window for gathering all the values
     def build_ui(self):
+
+        # creating the main layout
         main_layout = QVBoxLayout(self)
 
+        # ------------ ANIMATION TIMING -------------
+ 
+        # creating the group and giving it its layouts 
         animation_timing_group = QGroupBox("Animation Timing")
         animation_timing_layout = QHBoxLayout(self)
         animation_timing_group.setLayout(animation_timing_layout)
 
+        # creating all the value gathering widgets 
         animation_timing_duration_label = QLabel("Durations (Frames):")
         animation_timing_duration_value = QSpinBox()
         animation_timing_duration_value.setRange(0,999)
@@ -29,13 +37,15 @@ class RandomAnimator(QWidget):
         animation_timing_step_value = QSpinBox()
         animation_timing_step_value.setRange(0,999)
 
+        # adding all widgets to the layouts of the group 
         animation_timing_layout.addWidget(animation_timing_duration_label)
         animation_timing_layout.addWidget(animation_timing_duration_value)
         animation_timing_layout.addWidget(animation_timing_step_label)
         animation_timing_layout.addWidget(animation_timing_step_value)
 
-
+        # ------------ TRANSLATE -------------
         
+        # creating the group and giving it its layouts 
         translate_parameters_group = QGroupBox("Translate Parameters (in cm)")
         translate_min_max_layout = QVBoxLayout(self)
         translate_min_layout = QHBoxLayout(self) 
@@ -44,6 +54,7 @@ class RandomAnimator(QWidget):
         translate_min_max_layout.addLayout(translate_max_layout) 
         translate_parameters_group.setLayout(translate_min_max_layout)      
 
+        # creating all the value gathering widgets 
         translate_min_x_label = QLabel("Min x:")
         translate_min_x_value = QSpinBox()
         translate_min_x_value.setRange(0,999)
@@ -64,6 +75,7 @@ class RandomAnimator(QWidget):
         translate_max_z_value = QSpinBox()
         translate_max_z_value.setRange(0,999)
 
+        # adding all widgets to the layouts of the group 
         translate_min_layout.addWidget(translate_min_x_label)
         translate_min_layout.addWidget(translate_min_x_value)
         translate_min_layout.addWidget(translate_min_y_label)
@@ -78,8 +90,9 @@ class RandomAnimator(QWidget):
         translate_max_layout.addWidget(translate_max_z_label)
         translate_max_layout.addWidget(translate_max_z_value)
 
+        # ------------ ROTATE -------------
 
-
+        # creating the group and giving it its layouts 
         rotate_parameters_group = QGroupBox("Rotate Parameters (in degrees)")
         rotate_min_max_layout = QVBoxLayout(self)
         rotate_min_layout = QHBoxLayout(self)
@@ -88,6 +101,7 @@ class RandomAnimator(QWidget):
         rotate_min_max_layout.addLayout(rotate_max_layout)
         rotate_parameters_group.setLayout(rotate_min_max_layout)
 
+        # creating all the value gathering widgets 
         rotate_min_x_label = QLabel("Min x:")
         rotate_min_x_value = QSpinBox()
         rotate_min_x_value.setRange(0,999)
@@ -108,6 +122,7 @@ class RandomAnimator(QWidget):
         rotate_max_z_value = QSpinBox()
         rotate_max_z_value.setRange(0,999)
 
+        # adding all widgets to the layouts of the group 
         rotate_min_layout.addWidget(rotate_min_x_label)
         rotate_min_layout.addWidget(rotate_min_x_value)
         rotate_min_layout.addWidget(rotate_min_y_label)                
@@ -122,7 +137,9 @@ class RandomAnimator(QWidget):
         rotate_max_layout.addWidget(rotate_max_z_label)
         rotate_max_layout.addWidget(rotate_max_z_value)
 
+        # ------------ SCALE -------------
 
+        # creating the group and giving it its layouts 
         scale_parameters_group = QGroupBox("Scale Parameters (in cm)")
         scale_min_max_layout = QVBoxLayout(self)
         scale_min_layout = QHBoxLayout(self)
@@ -131,6 +148,7 @@ class RandomAnimator(QWidget):
         scale_min_max_layout.addLayout(scale_max_layout)
         scale_parameters_group.setLayout(scale_min_max_layout)
 
+        # creating all the value gathering widgets 
         scale_min_x_label = QLabel("Min x:")
         scale_min_x_value = QSpinBox()
         scale_min_x_value.setRange(0,999)
@@ -151,6 +169,7 @@ class RandomAnimator(QWidget):
         scale_max_z_value = QSpinBox()
         scale_max_z_value.setRange(0,999)     
 
+        # adding all widgets to the layouts of the group 
         scale_min_layout.addWidget(scale_min_x_label)
         scale_min_layout.addWidget(scale_min_x_value)
         scale_min_layout.addWidget(scale_min_y_label)
@@ -165,9 +184,11 @@ class RandomAnimator(QWidget):
         scale_max_layout.addWidget(scale_max_z_label)
         scale_max_layout.addWidget(scale_max_z_value)
 
-
+        # ------------ BUTTON -------------
 
         create_button = QPushButton("Generate")
+
+        # connect the button to a function (the lambda prevent the script from calling the function immediately)
         create_button.clicked.connect(lambda: Functions.generate_animation(animation_timing_duration_value.value(),animation_timing_step_value.value(),
                                                                            translate_min_x_value.value(),translate_min_y_value.value(),
                                                                            translate_min_z_value.value(),translate_max_x_value.value(),
@@ -179,9 +200,11 @@ class RandomAnimator(QWidget):
                                                                            scale_min_z_value.value(),scale_max_x_value.value(),
                                                                            scale_max_y_value.value(),scale_max_z_value.value() ))
 
+        
+        # add all groups to the main layout 
+
         main_layout.addWidget(animation_timing_group)
         main_layout.addWidget(translate_parameters_group)
         main_layout.addWidget(rotate_parameters_group)
         main_layout.addWidget(scale_parameters_group)
-        
         main_layout.addWidget(create_button)

@@ -20,6 +20,10 @@ def generate_animation(duration_value, step_value, trl_min_x, trl_min_y, trl_min
     # Begining of the chunk  
     try:
 
+         # adjust the timeline of the animation graph to fit the desired animation time 
+         cmds.playbackOptions(minTime=1, maxTime=duration_value)
+         cmds.playbackOptions(animationStartTime=1,animationEndTime=duration_value)
+
          # for loop on the floored division of the animation duration and the step value 
          for j in range((duration_value // step_value)):
 
